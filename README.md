@@ -1,4 +1,3 @@
-# Piano-Player
 # Piano Player 28/10/2025
 
 A collection of small web-based piano projects demonstrating sound synthesis, event handling, and object-oriented architecture in JavaScript.
