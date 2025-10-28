@@ -22,7 +22,7 @@ Such mistake keeps the pressed note down even after leaving the computer key.
 - Smooth fade-out sound release.
 - Octave shifting (`Z` / `X` keys).
 - Displays pressed notes in real time.
-- RECORDING MODE TO BE ADDED SOON.
+- RECORDING MODE TO BE ADDED SOON!
 
 ## Tech Stack
 - HTML, CSS, JavaScript
