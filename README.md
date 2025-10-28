@@ -29,7 +29,7 @@ Such mistake keeps the pressed note down even after leaving the computer key.
 - NO LIBRARIES USED.
 
 ## Usage
-Open `C4key/index.html` or `Keyboard/index.html` in any modern browser.
+Open `C4key/index.html` or `Keyboard/fullkeyboard.html` in any modern browser.
 
 ---
 
