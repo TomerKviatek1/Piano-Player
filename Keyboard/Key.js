@@ -17,6 +17,8 @@ class Key {
         this.#sound = sound;
         this.#id = this.#note + this.#octave;
         this.#element = element;
+
+        this.keyboard = Keyboard.getInstance();
         this.createEvents();
         this.updateLetter(this.keyboard.STARTING_OCTAVE);
     }
@@ -30,8 +32,6 @@ class Key {
     getLetter() {return this.#letter;}
 
     createEvents() {
-        this.keyboard = Keyboard.getInstance();
-
         this.#element.addEventListener("mouseenter", () => {
             this.keyboard.updateHoveredKey(this);
             if (this.keyboard.mouseDown) this.keyboard.pressKey(this);
