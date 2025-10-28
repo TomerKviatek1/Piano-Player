@@ -1,10 +1,15 @@
 class Keyboard {
+    NOTES = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"];
+    STARTING_OCTAVE = 4;
+    MIN_OCTAVE = 0;
+    MAX_OCTAVE = 7;
+    MAPPING = Mappings.letterToNote;
+
     static #instance = null;
+
     noteToKey = {};
     elementToKey = new Map();
-    letterToNote = Mappings.letterToNote;
     keyHovered;
-    notes = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"];
 
     constructor(container) {
         if (Keyboard.#instance) return Keyboard.#instance;
@@ -12,7 +17,7 @@ class Keyboard {
         this.mouseDown = false;
         this.keysDown = new Set();
         this.lettersDown = new Set();
-        this.currOctave = 4;
+        this.currOctave = this.STARTING_OCTAVE;
         this.display = document.getElementById("text");
         
         Keyboard.#instance = this;
@@ -49,7 +54,7 @@ class Keyboard {
     
         window.addEventListener("keydown", (e) => {
             const lcKey = e.key.toLowerCase();
-            if (lcKey in this.letterToNote) {
+            if (lcKey in this.MAPPING) {
                 const currNote = this.getNoteByLetter(lcKey);
                 if (currNote in this.noteToKey) {
                     const currKey = this.noteToKey[currNote];
@@ -62,7 +67,7 @@ class Keyboard {
         window.addEventListener("keyup", (e) => {
             const lcKey = e.key.toLowerCase();
             this.lettersDown.delete(lcKey);
-            if (lcKey in this.letterToNote) {
+            if (lcKey in this.MAPPING) {
                 const currNote = this.getNoteByLetter(lcKey);
                 if (currNote in this.noteToKey) {
                     const currKey = this.noteToKey[currNote];
@@ -77,11 +82,11 @@ class Keyboard {
 
         window.addEventListener("keydown", (e) => {
             const lcKey = e.key.toLowerCase();
-            if (lcKey === "x" && this.currOctave + 1 <= 7) {
+            if (lcKey === "x" && this.currOctave + 1 <= this.MAX_OCTAVE) {
                 this.currOctave++;
                 this.elementToKey.forEach((key) => key.updateLetter(this.currOctave));
             }
-            else if (lcKey === "z" && this.currOctave - 1 >= 0) {
+            else if (lcKey === "z" && this.currOctave - 1 >= this.MIN_OCTAVE) {
                 this.currOctave--;
                 this.elementToKey.forEach((key) => key.updateLetter(this.currOctave));
             }
@@ -91,15 +96,15 @@ class Keyboard {
     buildKeys() {
         let whiteKeyIndex = 0;
 
-        this.notes.slice(9).forEach((note) => whiteKeyIndex = this.assembleKey(note, 0, whiteKeyIndex));
+        this.NOTES.slice(9).forEach((note) => whiteKeyIndex = this.assembleKey(note, 0, whiteKeyIndex));
 
-        for (let octave = 1; octave < 8; octave++) {
-            this.notes.forEach((note) => {
+        for (let octave = 1; octave <= this.MAX_OCTAVE; octave++) {
+            this.NOTES.forEach((note) => {
                 whiteKeyIndex = this.assembleKey(note, octave, whiteKeyIndex);
             });
         }
 
-        whiteKeyIndex = this.assembleKey(this.notes[0], 8, whiteKeyIndex);
+        whiteKeyIndex = this.assembleKey(this.NOTES[0], 8, whiteKeyIndex);
     }
 
     assembleKey(note, octave, whiteKeyIndex) {
@@ -123,7 +128,6 @@ class Keyboard {
         const key = new Key(note, octave, color, sound, keyElement);
         this.noteToKey[id] = key;
         this.elementToKey.set(keyElement, key);
-        key.createEvents();
 
         return (color === Color.WHITE) ? whiteKeyIndex +1 : whiteKeyIndex;
     }
@@ -146,7 +150,7 @@ class Keyboard {
         const text = Array.from(this.keysDown)
         .sort((a, b) => {
             return (a.getOctave() - b.getOctave() ||
-            this.notes.indexOf(a.getNote()) - this.notes.indexOf(b.getNote())
+            this.NOTES.indexOf(a.getNote()) - this.NOTES.indexOf(b.getNote())
             );
         })
         .map(key => key.getId())
@@ -156,10 +160,10 @@ class Keyboard {
 
     getNoteByLetter(letter) {
         let currNote;
-        if (this.letterToNote[letter].includes(".")) {
-            currNote = this.letterToNote[letter].slice(0, -1) + (this.currOctave + 1);
+        if (this.MAPPING[letter].includes(".")) {
+            currNote = this.MAPPING[letter].slice(0, -1) + (this.currOctave + 1);
         } else {
-            currNote = this.letterToNote[letter] + this.currOctave;
+            currNote = this.MAPPING[letter] + this.currOctave;
         }
         return currNote;
     }

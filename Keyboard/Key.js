@@ -17,7 +17,8 @@ class Key {
         this.#sound = sound;
         this.#id = this.#note + this.#octave;
         this.#element = element;
-        this.updateLetter(4);
+        this.createEvents();
+        this.updateLetter(this.keyboard.STARTING_OCTAVE);
     }
 
     getNote() {return this.#note;}
@@ -99,9 +100,9 @@ class Key {
 
     updateLetter(octave) {
         if (this.#octave === octave) {
-            this.#letter = Object.keys(Mappings.letterToNote).find(key => Mappings.letterToNote[key] === this.#note);
-        } else if (this.#octave === octave + 1 && ["C", "C#", "D", "Eb", "E", "F", "F#"].includes(this.#note)) {
-            this.#letter = Object.keys(Mappings.letterToNote).find(key => Mappings.letterToNote[key] === this.#note + ".");
+            this.#letter = Object.keys(this.keyboard.MAPPING).find(key => this.keyboard.MAPPING[key] === this.#note);
+        } else if (this.#octave === octave + 1 && this.keyboard.NOTES.slice(0, 7).includes(this.#note)) {
+            this.#letter = Object.keys(this.keyboard.MAPPING).find(key => this.keyboard.MAPPING[key] === this.#note + ".");
         }
         else this.#letter = "";
     }
