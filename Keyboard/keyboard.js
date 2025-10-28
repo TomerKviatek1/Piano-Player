@@ -15,11 +15,8 @@ class Keyboard {
         this.currOctave = 4;
         this.display = document.getElementById("text");
         
-        this.buildKeys();
         Keyboard.#instance = this;
-        
-        const keys = document.querySelectorAll(".key");
-        keys.forEach((keyElement) => this.elementToKey.get(keyElement).createEvents());
+        this.buildKeys();
 
         this.createEvents();
     }
@@ -51,7 +48,7 @@ class Keyboard {
         window.addEventListener("contextmenu", () => this.mouseDown = false);
     
         window.addEventListener("keydown", (e) => {
-            const lcKey = e.key.toLocaleLowerCase();
+            const lcKey = e.key.toLowerCase();
             if (lcKey in this.letterToNote) {
                 const currNote = this.getNoteByLetter(lcKey);
                 if (currNote in this.noteToKey) {
@@ -63,7 +60,7 @@ class Keyboard {
         });
         
         window.addEventListener("keyup", (e) => {
-            const lcKey = e.key.toLocaleLowerCase();
+            const lcKey = e.key.toLowerCase();
             this.lettersDown.delete(lcKey);
             if (lcKey in this.letterToNote) {
                 const currNote = this.getNoteByLetter(lcKey);
@@ -79,7 +76,7 @@ class Keyboard {
         });
 
         window.addEventListener("keydown", (e) => {
-            const lcKey = e.key.toLocaleLowerCase();
+            const lcKey = e.key.toLowerCase();
             if (lcKey === "x" && this.currOctave + 1 <= 7) {
                 this.currOctave++;
                 this.elementToKey.forEach((key) => key.updateLetter(this.currOctave));
@@ -126,6 +123,7 @@ class Keyboard {
         const key = new Key(note, octave, color, sound, keyElement);
         this.noteToKey[id] = key;
         this.elementToKey.set(keyElement, key);
+        key.createEvents();
 
         return (color === Color.WHITE) ? whiteKeyIndex +1 : whiteKeyIndex;
     }
