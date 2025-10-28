@@ -17,7 +17,7 @@ class Key {
         this.#sound = sound;
         this.#id = this.#note + this.#octave;
         this.#element = element;
-        this.#letter = Object.keys(Mappings.letterToNote).find(key => Mappings.letterToNote[key] === this.#note);
+        this.updateLetter(4);
     }
 
     getNote() {return this.#note;}
@@ -95,5 +95,14 @@ class Key {
                 clearInterval(fade);
             }
         }, 10);
+    }
+
+    updateLetter(octave) {
+        if (this.#octave === octave) {
+            this.#letter = Object.keys(Mappings.letterToNote).find(key => Mappings.letterToNote[key] === this.#note);
+        } else if (this.#octave === octave + 1 && ["C", "C#", "D", "Eb", "E", "F", "F#"].includes(this.#note)) {
+            this.#letter = Object.keys(Mappings.letterToNote).find(key => Mappings.letterToNote[key] === this.#note + ".");
+        }
+        else this.#letter = "";
     }
 };

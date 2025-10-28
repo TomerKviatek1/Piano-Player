@@ -14,8 +14,6 @@ Such behavior is not regarded in the other way, meaning no mouse retriggers when
 To be regarded in the future.
 
 Certain bugs are to be fixed:
-- Key.#letter is assigned wrong and needs to be updated for every octave jump with "x" or "z".
-Such mistake prevets from playing octaves simultaniously.
 - When shifting octaves while pressing a key with the computer keyboard, "keyup" event hooks the wrong key for it is now an octave away.
 Such mistake keeps the pressed note down even after leaving the computer key.
 
@@ -32,5 +30,7 @@ Such mistake keeps the pressed note down even after leaving the computer key.
 
 ## Usage
 Open `C4key/index.html` or `Keyboard/index.html` in any modern browser.
+
+---
 
 Created by Tomer Kviatek

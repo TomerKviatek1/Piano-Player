@@ -80,8 +80,14 @@ class Keyboard {
 
         window.addEventListener("keydown", (e) => {
             const lcKey = e.key.toLocaleLowerCase();
-            if (lcKey === "x" && this.currOctave + 1 <= 7) this.currOctave++;
-            else if (lcKey === "z" && this.currOctave - 1 >= 0) this.currOctave--;
+            if (lcKey === "x" && this.currOctave + 1 <= 7) {
+                this.currOctave++;
+                this.elementToKey.forEach((key) => key.updateLetter(this.currOctave));
+            }
+            else if (lcKey === "z" && this.currOctave - 1 >= 0) {
+                this.currOctave--;
+                this.elementToKey.forEach((key) => key.updateLetter(this.currOctave));
+            }
         })
     }
 
