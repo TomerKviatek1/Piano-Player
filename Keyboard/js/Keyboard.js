@@ -48,7 +48,9 @@ class Keyboard {
             const keyElement = e.target.closest(".key");
             if (keyElement && this.elementToKey.has(keyElement)) {
                 const currKey = this.elementToKey.get(keyElement);
-                this.releaseKey(currKey);
+                if (![...this.lettersDown.values()].includes(currKey)){
+                    this.releaseKey(currKey);
+                }
             }
         });
 

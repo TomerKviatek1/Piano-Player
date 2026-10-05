@@ -45,9 +45,11 @@ class Key {
     }
 
     pressKey() {
+        clearTimeout(this.retriggerTimer);
         if (this.isPressed) {
             this.release();
-            setTimeout(() => {
+            this.retriggerTimer = setTimeout(() => {
+                this.retriggerTimer = null;
                 this.press();
                 this.play();
                 this.keyboard.updateDisplay();
@@ -61,6 +63,8 @@ class Key {
     }
 
     releaseKey() {
+        clearTimeout(this.retriggerTimer);
+        this.retriggerTimer = null;
         this.release();
         this.unplay();
         this.keyboard.updateDisplay();
