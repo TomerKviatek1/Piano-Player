@@ -1,37 +1,3 @@
-body {
-    color: white;
-    background-color: black;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    height: 100vh;
-}
-
-h1 {
-    color: white;
-    text-align: center;
-    font-size: 60px;
-    margin: 10px;
-}
-
-#instructions {
-    color: white;
-    display: flex;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    align-items: center;
-    justify-content: flex-start;
-    flex-direction: column;
-    font-size: 20px;
-    margin-top: 0;
-}
-
-#instructions p {
-    margin: 2px;
-}
-
 #piano {
     width: 95vw;
     height: 30vh;
@@ -51,7 +17,8 @@ h1 {
 }
 
 #display {
-    height: 14%;
+    margin: 10px;
+    height: 45px;
     font-size: 30px;
     color: white;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;

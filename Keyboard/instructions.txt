@@ -1,3 +1,0 @@
-Use your mouse or computer keyboard to play notes
-Underneath, played notes are shown in pitch order
-Press "x" or "z" to go up and down the octaves respectively

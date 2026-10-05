@@ -1,0 +1,149 @@
+#recorder {
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 200px;
+    width: 95vh;
+}
+
+#recording-controls{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+#timer{
+    display: flex;
+    justify-content: center;
+}
+
+#timer-text{
+    margin: 0;
+    font-size: 40px;
+    color: white;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#recording-overflow{
+    font-size: 30px;
+    color: white;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#record-btn{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 30px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background-color: rgb(255, 20, 20);
+    border: 10px solid rgb(172, 0 ,0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow 0.1s ease;
+}
+
+#record-btn:hover{
+    box-shadow: 0 0 15px rgba(255, 255, 255, 1);
+}
+
+#record-btn.recording{
+    background-color: rgb(127, 255, 155);
+    border: 10px solid greenyellow;
+}
+
+#recording-panel{
+    background-color: rgb(223, 196, 74);
+    aspect-ratio: 1/1.618;
+    flex-grow: 1;
+    position: relative;
+    border-radius: 5%;
+}
+
+#recordings-title{
+    color: black;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 30px;
+    margin: 15px;
+    text-align: center;   
+}
+
+#recording-list{
+    background-color: rgb(145, 127, 44);
+    color: black;
+    bottom: 3%;
+    height: 82%;
+    right: 3%;
+    width: 94%;
+    position: absolute;
+    border-radius: 5%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    overflow-y: auto;
+    box-sizing: border-box;
+    gap: 4px;
+    padding: 4px;
+}
+
+.recording-item{
+    background-color: rgb(223, 196, 74);
+    flex-shrink: 0;
+    aspect-ratio: 3/1;
+    border-radius: 10%;
+    display: flex;
+}
+
+.recording-name{
+    flex: 2;
+    min-width: 0;
+    display: flex;
+    align-items: flex-start;
+    padding: 8px;
+    overflow-wrap: anywhere;
+    font-size: 15px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.recording-btns{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px;
+    box-sizing: border-box;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.play-btn, .delete-btn{
+    flex: 1;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background-color 0.075s ease;
+    border-radius: 999px;
+    font-weight: 600;
+}   
+
+.play-btn{
+    background-color: chartreuse;
+    color: black;
+    border: 5px solid rgba(70, 110, 9, 0.566)
+}
+
+.play-btn:hover{
+    background-color: rgb(42, 189, 16);
+    border: 5px solid black;
+}
+
+.delete-btn{
+    background-color: rgb(255, 0 ,0);
+    color: black;
+    border: 5px solid rgb(172, 0 ,0)
+}
+
+.delete-btn:hover{
+    background-color: rgb(172, 0, 0);
+    border: 5px solid black;
+}

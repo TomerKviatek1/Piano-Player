@@ -10,15 +10,18 @@ class Keyboard {
     noteToKey = {};
     elementToKey = new Map();
     keyHovered;
+    Xdown = false;
+    Zdown = false;
 
     constructor(container) {
         if (Keyboard.#instance) return Keyboard.#instance;
         this.container = container
         this.mouseDown = false;
         this.keysDown = new Set();
-        this.lettersDown = new Set();
+        this.lettersDown = new Map();
         this.currOctave = this.STARTING_OCTAVE;
         this.display = document.getElementById("text");
+        this.inputEnabled = true;
         
         Keyboard.#instance = this;
         this.buildKeys();
@@ -28,7 +31,9 @@ class Keyboard {
 
     createEvents() {
         window.addEventListener("mousedown", () => this.mouseDown = true);
+
         this.container.addEventListener("mousedown", (e) => {
+            if (!this.inputEnabled) return;
             const keyElement = e.target.closest(".key");
             if (keyElement && this.elementToKey.has(keyElement)) {
                 const currKey = this.elementToKey.get(keyElement);
@@ -37,7 +42,9 @@ class Keyboard {
         });
 
         window.addEventListener("mouseup", () => this.mouseDown = false);
+
         this.container.addEventListener("mouseup", (e) => {
+            if (!this.inputEnabled) return;
             const keyElement = e.target.closest(".key");
             if (keyElement && this.elementToKey.has(keyElement)) {
                 const currKey = this.elementToKey.get(keyElement);
@@ -45,51 +52,62 @@ class Keyboard {
             }
         });
 
-        window.addEventListener("blur", () => this.mouseDown = false);
-        window.addEventListener("pointercancel", () => this.mouseDown = false);
+        window.addEventListener("blur", () => this.resetDowns());
+        window.addEventListener("pointercancel", () => this.resetDowns());
+        window.addEventListener("contextmenu", () => this.resetDowns());
         document.addEventListener("visibilitychange", () => {
-            if (document.hidden) this.mouseDown = false;
+            if (document.hidden) this.resetDowns();
         });
-        window.addEventListener("contextmenu", () => this.mouseDown = false);
-    
+
         window.addEventListener("keydown", (e) => {
+            if (!this.inputEnabled) return;
             const lcKey = e.key.toLowerCase();
+            if (this.lettersDown.has(lcKey)) return;
             if (lcKey in this.MAPPING) {
                 const currNote = this.getNoteByLetter(lcKey);
                 if (currNote in this.noteToKey) {
                     const currKey = this.noteToKey[currNote];
                     this.pressKey(currKey);
-                    this.lettersDown.add(lcKey);
+                    this.lettersDown.set(lcKey, currKey);
                 }
             }
         });
         
         window.addEventListener("keyup", (e) => {
+            if (!this.inputEnabled) return;
             const lcKey = e.key.toLowerCase();
+            const currKey = this.lettersDown.get(lcKey);
             this.lettersDown.delete(lcKey);
             if (lcKey in this.MAPPING) {
-                const currNote = this.getNoteByLetter(lcKey);
-                if (currNote in this.noteToKey) {
-                    const currKey = this.noteToKey[currNote];
-                    if (!this.mouseDown) {
-                        this.releaseKey(currKey);
-                    } else if (this.keyHovered && this.keyHovered !== currKey) {
-                        this.releaseKey(currKey);
-                    }
+                if (!this.mouseDown) {
+                    this.releaseKey(currKey);
+                } else if (this.keyHovered && this.keyHovered !== currKey) {
+                    this.releaseKey(currKey);
                 }
             }
         });
 
         window.addEventListener("keydown", (e) => {
+            if (!this.inputEnabled) return;
             const lcKey = e.key.toLowerCase();
             if (lcKey === "x" && this.currOctave + 1 <= this.MAX_OCTAVE) {
+                if (this.Xdown) return;
+                this.Xdown = true;
                 this.currOctave++;
                 this.elementToKey.forEach((key) => key.updateLetter(this.currOctave));
             }
             else if (lcKey === "z" && this.currOctave - 1 >= this.MIN_OCTAVE) {
+                if (this.Zdown) return;
+                this.Zdown = true;
                 this.currOctave--;
                 this.elementToKey.forEach((key) => key.updateLetter(this.currOctave));
             }
+        })
+
+        window.addEventListener("keyup", (e) => {
+            const lcKey = e.key.toLowerCase();
+            if (lcKey === "x" && this.Xdown) this.Xdown = false;
+            if (lcKey === "z" && this.Zdown) this.Zdown = false;
         })
     }
 
@@ -139,11 +157,13 @@ class Keyboard {
     pressKey(key) {
         this.keysDown.add(key);
         key.pressKey();
+        Recorder.getInstance()?.noteEvent(key.getId(), NoteAction.DOWN);
     }
 
     releaseKey(key) {
         this.keysDown.delete(key);
         key.releaseKey();
+        Recorder.getInstance()?.noteEvent(key.getId(), NoteAction.UP);
     }
 
     updateDisplay() {
@@ -166,5 +186,18 @@ class Keyboard {
             currNote = this.MAPPING[letter] + this.currOctave;
         }
         return currNote;
+    }
+
+    releaseKeyboard(){
+        for (const key of this.keysDown){
+            this.releaseKey(key);
+        }
+    }
+
+    resetDowns(){
+        this.mouseDown = false;
+        this.Xdown = false;
+        this.Zdown = false;
+        if (this.inputEnabled) this.releaseKeyboard();
     }
 }

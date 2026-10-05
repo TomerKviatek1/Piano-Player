@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Keyboard player</title>
-  <link rel="stylesheet" href="keyboard.css">
+  <link rel="stylesheet" href="css/Base.css">
+  <link rel="stylesheet" href="css/Keyboard.css">
+  <link rel="stylesheet" href="css/Recorder.css">
+  <link rel="stylesheet" href="css/Popups.css">
 </head>
 
 <body>
@@ -15,11 +18,49 @@
       <p id="text"></p>
     </div>
   </div>
+
+  <div id="recorder">
+    <div id="recording-controls">
+      <button id="record-btn">Record</button>
+      <div id="timer">
+        <p id="timer-text"></p>
+        <p id="recording-overflow"></p>
+      </div>
+    </div>
+    <div id="recording-panel">
+      <div id="recordings-title">Recordings</div>
+      <div id="recording-list"></div>
+    </div>
+  </div>
+
+  <div id="naming-popup" class="hidden popup-box">
+    <div id="naming-box">
+      <label for="recording-name-input">Recording name:</label>
+      <input type="text" id="recording-name-input" maxlength="50">
+      <p id="naming-error"></p>
+      <div id="naming-buttons" class="buttons">
+        <button id="confirm-name-btn" class="popup-do-btn">Enter</button>
+        <button id="cancel-name-btn" class="popup-cancel-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="confirm-popup" class="hidden popup-box">
+    <div id="confirm-box">
+      <p id="confirm-text"></p>
+      <div id="confirm-buttons" class="buttons">
+        <button id="confirm-delete-btn" class="popup-do-btn">Delete</button>
+        <button id="confirm-cancel-btn" class="popup-cancel-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
 </body>
 
-<script src="Key.js"></script>
-<script src="Color.js"></script>
-<script src="Mappings.js"></script>
-<script src="Keyboard.js"></script>
-<script src="main.js"></script>
+<script src="js/Enums.js"></script>
+<script src="js/Mappings.js"></script>
+<script src="js/Key.js"></script>
+<script src="js/Keyboard.js"></script>
+<script src="js/Recording.js"></script>
+<Script src="js/Recorder.js"></Script>
+<script src="js/main.js"></script>
 </html>

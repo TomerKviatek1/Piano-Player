@@ -34,16 +34,18 @@ class Key {
     createEvents() {
         this.#element.addEventListener("mouseenter", () => {
             this.keyboard.updateHoveredKey(this);
-            if (this.keyboard.mouseDown) this.keyboard.pressKey(this);
+            if (this.keyboard.mouseDown && !this.isPressed) this.keyboard.pressKey(this);
         });
         this.#element.addEventListener("mouseleave", () => {
             this.keyboard.updateHoveredKey(null);
-            if (!this.keyboard.lettersDown.has(this.#letter)) this.keyboard.releaseKey(this);
+            if (this.isPressed && !([...this.keyboard.lettersDown.values()].includes(this))){
+                this.keyboard.releaseKey(this);
+            }
         });
     }
 
     pressKey() {
-        if (this.isPressed && !this.keyboard.lettersDown.has(this.#letter)) {
+        if (this.isPressed) {
             this.release();
             setTimeout(() => {
                 this.press();
@@ -51,7 +53,7 @@ class Key {
                 this.keyboard.updateDisplay();
                 
             }, 75);
-        } else if (!this.keyboard.lettersDown.has(this.#letter)) {
+        } else {
             this.press();
             this.play();
             this.keyboard.updateDisplay();
@@ -74,6 +76,8 @@ class Key {
     }
 
     play() {
+        clearTimeout(this.fadeDelay);
+        clearInterval(this.fade);
         this.#sound.currentTime = 1;
         this.#sound.volume = 1;
         this.#sound.play();
@@ -82,18 +86,18 @@ class Key {
     unplay() {
         const elapsed = performance.now() - this.#timePlayed;
         if (elapsed < 100) {
-            setTimeout(() => this.fadeOut(), 100 - elapsed);
+            this.fadeDelay = setTimeout(() => this.fadeOut(), 100 - elapsed);
         } else this.fadeOut();
     }
 
     fadeOut() {
-        const fade = setInterval(() => {
+        this.fade = setInterval(() => {
             if (this.#sound.volume - 0.1 > 0) {
                 this.#sound.volume -= 0.1;
             } else {
                 this.#sound.volume = 0;
                 this.#sound.pause();
-                clearInterval(fade);
+                clearInterval(this.fade);
             }
         }, 10);
     }
