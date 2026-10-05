@@ -20,7 +20,7 @@ Piano-Player/
 │   ├── fullkeyboard.html
 │   ├── css/
 │   │   ├── Base.css
-│   │   ├── keyboard.css
+│   │   ├── Keyboard.css
 │   │   ├── Recorder.css
 │   │   └── Popups.css
 │   ├── js/
@@ -57,16 +57,6 @@ There is exactly one keyboard and one recorder on the page. The singleton patter
 Notes are named `<pitch><octave>` (e.g. `"C#4"`), matching the `.wav` filenames in `sounds/`. A fixed `NOTES` array (`["C", "C#", "D", "Eb", ...]`) defines pitch order within an octave, used both for building the keyboard left-to-right and for sorting the currently-held notes in the live display (`updateDisplay`).
 
 The computer-keyboard mapping (`Mappings.letterToNote`) covers roughly one and a half octaves at a time — the lower row of letters (`a`–`j`) maps to the current octave, and a second row (`k` onward, using the `.` suffix convention, e.g. `"C."`) maps to current-octave+1's first 7 (white) notes. `Key.updateLetter(octave)` recomputes which letter (if any) is bound to that key whenever the octave shifts via `X`/`Z`.
-
-## Bugs that were found and fixed
-
-These three issues existed earlier in development and are worth being able to explain — both the original mechanism and the fix — since they all trace back to one root cause: **key identity/letter binding was being treated as always-current, when it actually needs to be resolved once (at press time) and then held fixed for the lifetime of that press.**
-
-1. **Mouse-then-keyboard retrigger asymmetry — fixed.** Originally, clicking a key with the mouse and then pressing its mapped letter would retrigger the note, but doing it in the other order wouldn't. The fix: both the mouse (`container` `mousedown`) and keyboard (`window` `keydown`) handlers now funnel through the exact same call — `Keyboard.pressKey(key)` → `Key.pressKey()` — with no per-input-source branching. Retriggering is now driven purely by `Key#isPressed`, so both input orders behave identically.
-
-2. **`Key.#letter` going stale across an octave shift — fixed.** The letter each key responds to is now recomputed for *every* key, immediately, on every octave change: `Keyboard`'s `X`/`Z` handlers call `this.elementToKey.forEach((key) => key.updateLetter(this.currOctave))` right after updating `currOctave`, so no key is left pointing at a letter binding from before the shift.
-
-3. **`keyup` releasing the wrong key after an octave shift — fixed.** `Keyboard.lettersDown` stores the actual `Key` *object* a letter triggered, captured once at `keydown` time (`this.lettersDown.set(lcKey, currKey)`) — it is never recomputed from the letter using whatever the *current* octave happens to be. So if the octave changes while a key is held, `keyup` still resolves to, and releases, that same original `Key` object — not whatever note that physical letter maps to now. (Traced concretely: press `a` at octave 4 → shift up with `x` → release `a` → still correctly releases the original C4 key, even though `a` now maps to C5.)
 
 ## Data structures — quick rationale
 
