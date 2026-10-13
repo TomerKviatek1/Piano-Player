@@ -194,6 +194,7 @@ class Keyboard {
         for (const key of this.keysDown){
             this.releaseKey(key);
         }
+        this.lettersDown.clear();
     }
 
     resetDowns(){
