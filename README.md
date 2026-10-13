@@ -1,3 +1,5 @@
+Demo Link: https://tomerkviatek1.github.io/Piano-Player/Keyboard/fullkeyboard.html
+
 # Piano Player
 
 A browser-based piano built in vanilla JavaScript — no frameworks, no audio libraries. It renders a full 88-key keyboard, plays real `.wav` samples per note, supports both mouse and computer-keyboard input simultaneously, and includes a recorder that captures a performance as a timed event list and can replay it.
